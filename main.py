@@ -11,7 +11,7 @@ import json
 load_dotenv()
 
 #Initialize all variables
-API_KEY = os.getenv("GOOGLE_AI_API_KEY", "AIzaSyCN_ngrcQAXqB-vAgbsk89ay1aIYLs_tN8") # Your API Key
+API_KEY = os.getenv("GOOGLE_AI_API_KEY", "#######") # Your API Key
 
 # Initialize the genai client with your API key.
 client = genai_sdk.Client(api_key=API_KEY)
