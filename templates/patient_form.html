@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Details - MediBot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .form-header h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        
+        .form-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2980b9;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        input, select, textarea {
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .pain-scale {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .pain-scale input[type="range"] {
+            flex: 1;
+            margin: 0 10px;
+        }
+        
+        .pain-value {
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 40px auto 0;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .info-box {
+            background: #e8f4fd;
+            border: 1px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-box i {
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-user-md"></i>
+                    <h1>Patient Information</h1>
+                </div>
+                <p class="subtitle">Help us understand your health concerns</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Patient Details Form</h2>
+                    <p>Please provide accurate information to help us give you the best care recommendations</p>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Your information is secure and will be sent to your healthcare provider.</span>
+                </div>
+
+                <form action="/submit_details" method="POST" id="patientForm">
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-user"></i>
+                            Personal Information
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">
+                                    Full Name <span class="required">*</span>
+                                </label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="age">
+                                    Age <span class="required">*</span>
+                                </label>
+                                <input type="number" id="age" name="age" min="1" max="120" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gender">
+                                    Gender <span class="required">*</span>
+                                </label>
+                                <select id="gender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                    <option value="prefer_not_to_say">Prefer not to say</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Symptoms -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-stethoscope"></i>
+                            Current Symptoms
+                        </h3>
+                        
+                        <div class="form-group full-width">
+                            <label for="primary_symptoms">
+                                Primary Symptoms <span class="required">*</span>
+                            </label>
+                            <textarea id="primary_symptoms" name="primary_symptoms" 
+                                     placeholder="Describe your main symptoms in detail..." required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="symptom_duration">
+                                    How long have you had these symptoms? <span class="required">*</span>
+                                </label>
+                                <select id="symptom_duration" name="symptom_duration" required>
+                                    <option value="">Select duration</option>
+                                    <option value="less_than_24_hours">Less than 24 hours</option>
+                                    <option value="1_3_days">1-3 days</option>
+                                    <option value="4_7_days">4-7 days</option>
+                                    <option value="1_2_weeks">1-2 weeks</option>
+                                    <option value="2_4_weeks">2-4 weeks</option>
+                                    <option value="1_3_months">1-3 months</option>
+                                    <option value="more_than_3_months">More than 3 months</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pain_level">
+                                    Pain Level (0 = No pain, 10 = Severe pain)
+                                </label>
+                                <div class="pain-scale">
+                                    <span>0</span>
+                                    <input type="range" id="pain_level" name="pain_level" min="0" max="10" value="0">
+                                    <span>10</span>
+                                    <div class="pain-value" id="painValue">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medical History -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-history"></i>
+                            Medical History
+                        </h3>
+                        
+                        <div class="form-group full-width">
+                            <label for="medical_history">
+                                Previous Medical Conditions
+                            </label>
+                            <textarea id="medical_history" name="medical_history" 
+                                     placeholder="List any chronic conditions, previous surgeries, or significant medical events..."></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="current_medications">
+                                    Current Medications
+                                </label>
+                                <textarea id="current_medications" name="current_medications" 
+                                         placeholder="List all medications, supplements, and vitamins you're currently taking..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="allergies">
+                                    Known Allergies
+                                </label>
+                                <textarea id="allergies" name="allergies" 
+                                         placeholder="List any known allergies to medications, foods, or other substances..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lifestyle Factors -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-heart"></i>
+                            Lifestyle Information
+                        </h3>
+                        
+                        <div class="form-group full-width">
+                            <label for="lifestyle_factors">
+                                Lifestyle Factors
+                            </label>
+                            <textarea id="lifestyle_factors" name="lifestyle_factors" 
+                                     placeholder="Include information about diet, exercise, sleep patterns, stress levels, smoking, alcohol consumption..."></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Continue to Assessment
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Pain scale functionality
+        const painSlider = document.getElementById('pain_level');
+        const painValue = document.getElementById('painValue');
+        
+        painSlider.addEventListener('input', function() {
+            painValue.textContent = this.value;
+            
+            // Change color based on pain level
+            const level = parseInt(this.value);
+            if (level === 0) {
+                painValue.style.background = '#27ae60';
+            } else if (level <= 3) {
+                painValue.style.background = '#f39c12';
+            } else if (level <= 6) {
+                painValue.style.background = '#e67e22';
+            } else {
+                painValue.style.background = '#e74c3c';
+            }
+        });
+        
+        // Form validation
+        document.getElementById('patientForm').addEventListener('submit', function(e) {
+            const requiredFields = this.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e9ecef';
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please fill in all required fields.');
+            }
+        });
+        
+        // Auto-resize textareas
+        document.querySelectorAll('textarea').forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        });
+    </script>
+</body>
+</html>

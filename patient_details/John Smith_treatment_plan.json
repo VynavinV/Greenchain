@@ -1,0 +1,96 @@
+{
+    "patient_summary": {
+        "condition": "Likely a common viral upper respiratory infection, given the symptoms and recent contact with an ill person.",
+        "severity": "Low",
+        "urgency": "Routine"
+    },
+    "immediate_care": [
+        {
+            "action": "Rest and Hydration",
+            "description": "Prioritize rest to aid your body's recovery. Drink plenty of fluids like water, clear broths, and electrolyte drinks to prevent dehydration.",
+            "icon": "fas fa-bed"
+        },
+        {
+            "action": "Symptom Relief",
+            "description": "Use over-the-counter medications to manage symptoms as needed.  Focus on rest and allow your body's natural immune system to combat the illness.",
+            "icon": "fas fa-thermometer"
+        }
+    ],
+    "medications": [
+        {
+            "name": "Acetaminophen (Tylenol)",
+            "dosage": "Follow product label directions for fever and pain relief.",
+            "frequency": "As needed",
+            "duration": "Until symptoms subside",
+            "type": "OTC",
+            "icon": "fas fa-pills"
+        },
+        {
+            "name": "Saline Nasal Spray",
+            "dosage": "Use as directed on the product label",
+            "frequency": "As needed for nasal congestion",
+            "duration": "Until symptoms subside",
+            "type": "OTC",
+            "icon": "fas fa-spray-can"
+        },
+        {
+            "name": "Over-the-counter cough suppressant (dextromethorphan) or expectorant (guaifenesin)",
+            "dosage": "Follow product label directions. Consider using a cough suppressant for a dry cough and an expectorant for a productive cough.",
+            "frequency": "As needed",
+            "duration": "Until symptoms subside",
+            "type": "OTC",
+            "icon": "fas fa-pills"
+        }
+    ],
+    "lifestyle_recommendations": [
+        {
+            "category": "Hydration",
+            "recommendation": "Drink plenty of fluids such as water, clear broths, and herbal teas.",
+            "icon": "fas fa-glass-water"
+        },
+        {
+            "category": "Rest",
+            "recommendation": "Get adequate rest to support your immune system's response.",
+            "icon": "fas fa-bed"
+        },
+        {
+            "category": "Nutrition",
+            "recommendation": "Maintain a balanced diet to support overall health and recovery.  Continue your millet-based diet, ensuring it provides sufficient nutrients.",
+            "icon": "fas fa-utensils"
+        }
+    ],
+    "warning_signs": [
+        {
+            "sign": "Worsening shortness of breath or wheezing",
+            "action": "Seek immediate medical attention if you experience shortness of breath or wheezing, especially given your history of asthma.",
+            "icon": "fas fa-exclamation-triangle"
+        },
+        {
+            "sign": "High fever (over 101\u00b0F or 38.3\u00b0C) that persists for more than 3 days",
+            "action": "Consult your doctor if you have a high fever that does not respond to treatment.",
+            "icon": "fas fa-exclamation-triangle"
+        },
+        {
+            "sign": "Severe or persistent pain",
+            "action": "Contact your doctor if you experience severe or persistent pain.",
+            "icon": "fas fa-exclamation-triangle"
+        }
+    ],
+    "follow_up": {
+        "timeline": "If symptoms worsen or persist beyond 7 days, or if you develop new symptoms.",
+        "with_whom": "Primary care physician",
+        "reason": "To assess symptom progression and ensure appropriate management."
+    },
+    "emergency_contacts": [
+        {
+            "service": "Emergency Services",
+            "when_to_call": "If you experience difficulty breathing, chest pain, or other severe symptoms.",
+            "number": "911"
+        },
+        {
+            "service": "Urgent Care",
+            "when_to_call": "For immediate medical attention outside of regular doctor's office hours.",
+            "number": "[Insert local urgent care number]"
+        }
+    ]
+}

@@ -1,0 +1,57 @@
+
+<!-- filepath: /home/vynavin/Documents/projects/Hackathons/Greenchain/templates/doctor_summary.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Summary - MediBot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-user-md"></i>
+                    <h1>Patient Overview</h1>
+                </div>
+                <p class="subtitle">Summary of all patients and their latest treatment plans</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="form-container">
+                <h2>Patient List</h2>
+                {% if patient_names %}
+                <table style="width:100%; border-collapse:collapse; margin-top:20px;">
+                    <thead>
+                        <tr style="background:#f8f9fa;">
+                            <th style="padding:10px; border-bottom:2px solid #e9ecef; text-align:left;">#</th>
+                            <th style="padding:10px; border-bottom:2px solid #e9ecef; text-align:left;">Patient Name</th>
+                            <th style="padding:10px; border-bottom:2px solid #e9ecef; text-align:left;">View Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for name in patient_names %}
+                        <tr>
+                            <td style="padding:10px; border-bottom:1px solid #e9ecef;">{{ loop.index }}</td>
+                            <td style="padding:10px; border-bottom:1px solid #e9ecef;">{{ name }}</td>
+                            <td style="padding:10px; border-bottom:1px solid #e9ecef;">
+                                <a href="/doctor/patient/{{ name }}" class="btn btn-primary">
+                                    <i class="fas fa-file-medical"></i> View Treatment Plan
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p>No patient records found.</p>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

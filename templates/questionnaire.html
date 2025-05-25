@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Questions - MediBot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .questionnaire-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 20px auto;
+            max-width: 700px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .question-card.active {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .question-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .question-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .question-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .question-options {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .question-options.error {
+            border: 2px solid #e74c3c !important;
+            border-radius: 10px !important;
+            padding: 10px !important;
+            background-color: rgba(231, 76, 60, 0.05);
+        }
+        
+        .option-button {
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .option-button:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+        
+        .option-button.selected {
+            border-color: #3498db;
+            background: #e8f4fd;
+            color: #2980b9;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+        
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-prev {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #dee2e6;
+        }
+        
+        .btn-prev:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .btn-next {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-submit {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .question-card {
+            display: none;
+        }
+        
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .required-indicator {
+            color: #e74c3c;
+            margin-left: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .questionnaire-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h1>Health Assessment</h1>
+                </div>
+                <p class="subtitle">Personalized questions based on your symptoms</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="questionnaire-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <form id="questionnaireForm" action="/submit_questionnaire" method="POST">
+                    {% for question in questions %}
+                    <div class="question-card" data-question-id="{{ question.id }}">
+                        <div class="question-number">{{ loop.index }}</div>
+                        <div class="question-text">
+                            {{ question.question }}
+                            {% if question.required %}
+                            <span class="required-indicator">*</span>
+                            {% endif %}
+                        </div>
+                        
+                        {% if question.type == 'text' %}
+                            <input type="text" 
+                                   name="{{ question.id }}" 
+                                   class="question-input" 
+                                   {% if question.required %}required{% endif %}
+                                   placeholder="Enter your answer...">
+                        {% elif question.type == 'textarea' %}
+                            <textarea name="{{ question.id }}" 
+                                     class="question-input" 
+                                     rows="4"
+                                     {% if question.required %}required{% endif %}
+                                     placeholder="Please provide details..."></textarea>
+                        {% elif question.type == 'number' %}
+                            <input type="number" 
+                                   name="{{ question.id }}" 
+                                   class="question-input" 
+                                   {% if question.required %}required{% endif %}
+                                   placeholder="Enter a number...">
+                        {% elif question.type == 'select' %}
+                            <div class="question-options">
+                                {% for option in question.options %}
+                                <div class="option-button" data-value="{{ option }}">
+                                    {{ option }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <input type="hidden" name="{{ question.id }}" data-required="{{ question.required }}">
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-btn btn-prev" id="prevBtn" style="display: none;">
+                            <i class="fas fa-arrow-left"></i>
+                            Previous
+                        </button>
+                        
+                        <div style="flex: 1;"></div>
+                        
+                        <button type="button" class="nav-btn btn-next" id="nextBtn">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        
+                        <button type="submit" class="nav-btn btn-submit" id="submitBtn" style="display: none;">
+                            <i class="fas fa-check"></i>
+                            Complete Assessment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        class QuestionnaireManager {
+            constructor() {
+                this.questions = document.querySelectorAll('.question-card');
+                this.currentQuestion = 0;
+                this.totalQuestions = this.questions.length;
+                this.answers = {};
+                
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.submitBtn = document.getElementById('submitBtn');
+                this.progressFill = document.getElementById('progressFill');
+                
+                this.init();
+            }
+            
+            init() {
+                this.showQuestion(0);
+                this.setupEventListeners();
+                this.updateProgress();
+            }
+            
+            setupEventListeners() {
+                this.prevBtn.addEventListener('click', () => this.goToPrevious());
+                this.nextBtn.addEventListener('click', () => this.goToNext());
+                
+                // Handle option buttons
+                document.querySelectorAll('.option-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const questionCard = e.target.closest('.question-card');
+                        const questionId = questionCard.dataset.questionId;
+                        const value = e.target.dataset.value;
+                        
+                        // Clear previous selections
+                        questionCard.querySelectorAll('.option-button').forEach(btn => {
+                            btn.classList.remove('selected');
+                        });
+                        
+                        // Select current option
+                        e.target.classList.add('selected');
+                        
+                        // Set hidden input value
+                        const hiddenInput = questionCard.querySelector('input[type="hidden"]');
+                        if (hiddenInput) {
+                            hiddenInput.value = value;
+                        }
+                        
+                        // Remove error styling when a selection is made
+                        const optionsContainer = questionCard.querySelector('.question-options');
+                        if (optionsContainer) {
+                            optionsContainer.classList.remove('error');
+                        }
+                    });
+                });
+                
+                // Auto-resize textareas
+                document.querySelectorAll('textarea').forEach(textarea => {
+                    textarea.addEventListener('input', function() {
+                        this.style.height = 'auto';
+                        this.style.height = this.scrollHeight + 'px';
+                    });
+                });
+            }
+            
+            showQuestion(index) {
+                // Hide all questions and remove required from all inputs
+                this.questions.forEach((question, i) => {
+                    question.classList.remove('active');
+                    // Remove required from all inputs in hidden questions
+                    question.querySelectorAll('input, textarea, select').forEach(input => {
+                        input.required = false;
+                    });
+                });
+
+                // Show current question and set required only for its inputs
+                if (this.questions[index]) {
+                    this.questions[index].classList.add('active');
+                    this.questions[index].querySelectorAll('input, textarea, select').forEach(input => {
+                        // Only set required if it was originally required in the template
+                        if (input.hasAttribute('data-required') && input.getAttribute('data-required') === 'True') {
+                            input.required = true;
+                        } else if (input.hasAttribute('required')) {
+                            input.required = true;
+                        }
+                    });
+                }
+
+                // Update button visibility
+                this.prevBtn.style.display = index > 0 ? 'flex' : 'none';
+                this.nextBtn.style.display = index < this.totalQuestions - 1 ? 'flex' : 'none';
+                this.submitBtn.style.display = index === this.totalQuestions - 1 ? 'flex' : 'none';
+            }
+            
+            goToNext() {
+                if (this.validateCurrentQuestion()) {
+                    this.currentQuestion++;
+                    this.showQuestion(this.currentQuestion);
+                    this.updateProgress();
+                }
+            }
+            
+            goToPrevious() {
+                this.currentQuestion--;
+                this.showQuestion(this.currentQuestion);
+                this.updateProgress();
+            }
+            
+            validateCurrentQuestion() {
+                const currentQuestionElement = this.questions[this.currentQuestion];
+                let isValid = true;
+                
+                // Check regular required inputs (text, textarea, number)
+                const requiredInputs = currentQuestionElement.querySelectorAll('input[required], textarea[required]');
+                for (let input of requiredInputs) {
+                    if (!input.value.trim()) {
+                        input.style.borderColor = '#e74c3c';
+                        alert('Please answer this question before continuing.');
+                        return false;
+                    } else {
+                        input.style.borderColor = '#e9ecef';
+                    }
+                }
+                
+                // Check select-type questions (hidden inputs with data-required)
+                const selectInputs = currentQuestionElement.querySelectorAll('input[type="hidden"][data-required="True"]');
+                for (let input of selectInputs) {
+                    if (!input.value.trim()) {
+                        // Highlight the options container
+                        const optionsContainer = input.previousElementSibling;
+                        if (optionsContainer && optionsContainer.classList.contains('question-options')) {
+                            optionsContainer.classList.add('error');
+                        }
+                        alert('Please select an answer for this question before continuing.');
+                        return false;
+                    } else {
+                        // Remove error styling
+                        const optionsContainer = input.previousElementSibling;
+                        if (optionsContainer && optionsContainer.classList.contains('question-options')) {
+                            optionsContainer.classList.remove('error');
+                        }
+                    }
+                }
+                
+                return true;
+            }
+            
+            updateProgress() {
+                const progress = ((this.currentQuestion + 1) / this.totalQuestions) * 100;
+                this.progressFill.style.width = progress + '%';
+            }
+        }
+        
+        // Initialize questionnaire
+        document.addEventListener('DOMContentLoaded', () => {
+            new QuestionnaireManager();
+        });
+        
+        // Form submission validation
+        document.getElementById('questionnaireForm').addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            // Check regular required fields (text, textarea, number)
+            const requiredFields = this.querySelectorAll('input[required], textarea[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e9ecef';
+                }
+            });
+            
+            // Check select-type questions (hidden inputs with data-required)
+            const selectFields = this.querySelectorAll('input[type="hidden"][data-required="True"]');
+            selectFields.forEach(field => {
+                if (!field.value.trim()) {
+                    // Highlight the options container
+                    const optionsContainer = field.previousElementSibling;
+                    if (optionsContainer && optionsContainer.classList.contains('question-options')) {
+                        optionsContainer.classList.add('error');
+                    }
+                    isValid = false;
+                } else {
+                    // Remove error styling
+                    const optionsContainer = field.previousElementSibling;
+                    if (optionsContainer && optionsContainer.classList.contains('question-options')) {
+                        optionsContainer.classList.remove('error');
+                    }
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please answer all required questions.');
+            }
+        });
+    </script>
+</body>
+</html>

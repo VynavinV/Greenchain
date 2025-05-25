@@ -1,0 +1,96 @@
+{
+    "patient_summary": {
+        "condition": "Likely a common cold or allergic rhinitis due to pollen exposure.",
+        "severity": "Low",
+        "urgency": "Routine"
+    },
+    "immediate_care": [
+        {
+            "action": "Increase fluid intake",
+            "description": "Drink plenty of water, clear broths, or electrolyte solutions to stay hydrated.",
+            "icon": "fas fa-water"
+        },
+        {
+            "action": "Rest",
+            "description": "Get adequate rest to support your body's natural healing process.",
+            "icon": "fas fa-bed"
+        }
+    ],
+    "medications": [
+        {
+            "name": "Over-the-counter pain reliever (e.g., Acetaminophen)",
+            "dosage": "Follow package instructions.",
+            "frequency": "As needed for pain or fever",
+            "duration": "Until symptoms subside",
+            "type": "OTC",
+            "icon": "fas fa-pills"
+        },
+        {
+            "name": "Saline nasal spray",
+            "dosage": "Follow package instructions.",
+            "frequency": "As needed for nasal congestion",
+            "duration": "Until symptoms subside",
+            "type": "OTC",
+            "icon": "fas fa-spray-can"
+        },
+        {
+            "name": "Over-the-counter antihistamine (e.g., Cetirizine)",
+            "dosage": "Follow package instructions.",
+            "frequency": "As needed for sneezing and itching",
+            "duration": "Until symptoms subside",
+            "type": "OTC",
+            "icon": "fas fa-pills"
+        }
+    ],
+    "lifestyle_recommendations": [
+        {
+            "category": "Exercise",
+            "recommendation": "Reduce or avoid strenuous exercise, especially outdoor activities, until symptoms improve to prevent worsening of symptoms.",
+            "icon": "fas fa-running"
+        },
+        {
+            "category": "Pollen Exposure",
+            "recommendation": "Limit exposure to pollen by staying indoors during peak pollen times or wearing a mask while outdoors.",
+            "icon": "fas fa-tree"
+        },
+        {
+            "category": "Hydration",
+            "recommendation": "Drink plenty of fluids to help thin mucus and ease congestion.",
+            "icon": "fas fa-glass-water"
+        }
+    ],
+    "warning_signs": [
+        {
+            "sign": "High fever (above 101\u00b0F or 38.3\u00b0C)",
+            "action": "Seek medical attention immediately.",
+            "icon": "fas fa-exclamation-triangle"
+        },
+        {
+            "sign": "Difficulty breathing or shortness of breath",
+            "action": "Seek immediate medical attention.",
+            "icon": "fas fa-exclamation-triangle"
+        },
+        {
+            "sign": "Worsening symptoms after several days",
+            "action": "Contact your primary care physician.",
+            "icon": "fas fa-exclamation-triangle"
+        }
+    ],
+    "follow_up": {
+        "timeline": "If symptoms persist beyond 7-10 days, or worsen",
+        "with_whom": "Primary care physician",
+        "reason": "To evaluate the effectiveness of treatment and rule out any other underlying conditions."
+    },
+    "emergency_contacts": [
+        {
+            "service": "Emergency Services",
+            "when_to_call": "Difficulty breathing, high fever, or other concerning symptoms",
+            "number": "911"
+        },
+        {
+            "service": "Urgent Care",
+            "when_to_call": "Worsening symptoms or concerns outside of primary care physician hours",
+            "number": "Your local urgent care number"
+        }
+    ]
+}
